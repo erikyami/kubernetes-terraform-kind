@@ -19,15 +19,17 @@ Release:        12
 Codename:       bookworm
 ```
 
+Instalando pacotes necessários:
+
 ```bash
 apt update && apt install make curl -y
 ```
 
 ### Docker Engine
 
-- [Script de Instalação](https://docs.docker.com/engine/install/debian/#install-using-the-convenience-script)
+Instalando o Docker Engine:
 
-Utilizando Script de Instalação:
+- [Script de Instalação](https://docs.docker.com/engine/install/debian/#install-using-the-convenience-script)
 
 ```bash
 sudo apt update && sudo apt install -y curl
@@ -43,6 +45,8 @@ Docker version 25.0.3, build 4debf41
 ```
 
 ### Terraform
+
+Instalação do Terraform:
 
 - [Roteiro de Instalação](https://developer.hashicorp.com/terraform/install?product_intent=terraform#Linux)
 
@@ -61,6 +65,8 @@ on linux_amd64
 ```
 
 ### Kubectl
+
+Instalação do kubectl
 
 - [Roteiro de Instalação](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-native-package-management)
 
