@@ -1,10 +1,98 @@
 ## Cluster Kubernetes
 
+Criar um cluster local Kubernetes `kind` utilizando `Terraform` para fazer o provisionamento.
+
 Pré-requisitos:
 
 - [docker](https://www.docker.com/)
 - [terraform](https://www.terraform.io/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
+
+No Laboratório irei utilizar o Debian GNU/Linux 12 (bookworm) como referência:
+
+```bash 
+root@srv-debian:~# lsb_release -a
+No LSB modules are available.
+Distributor ID: Debian
+Description:    Debian GNU/Linux 12 (bookworm)
+Release:        12
+Codename:       bookworm
+```
+
+```bash
+apt update && apt install make curl -y
+```
+
+### Docker Engine
+
+- [Script de Instalação](https://docs.docker.com/engine/install/debian/#install-using-the-convenience-script)
+
+Utilizando Script de Instalação:
+
+```bash
+sudo apt update && sudo apt install -y curl
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh ./get-docker.sh
+```
+
+Verificando a versão:
+
+```bash
+docker --version
+Docker version 25.0.3, build 4debf41
+```
+
+### Terraform
+
+- [Roteiro de Instalação](https://developer.hashicorp.com/terraform/install?product_intent=terraform#Linux)
+
+```bash
+wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install terraform
+```
+
+Verificando a versão:
+
+```bash
+terraform --version
+Terraform v1.7.3
+on linux_amd64
+```
+
+### Kubectl
+
+- [Roteiro de Instalação](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-native-package-management)
+
+```bash
+sudo apt-get update
+# apt-transport-https may be a dummy package; if so, you can skip that package
+sudo apt-get install -y apt-transport-https ca-certificates curl
+```
+
+```bash
+# If the folder `/etc/apt/keyrings` does not exist, it should be created before the curl command, read the note below.
+# sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+```
+
+```bash
+# This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+```
+
+```bash
+sudo apt-get update
+sudo apt-get install -y kubectl
+```
+
+Verificando a versão:
+
+```bash
+kubectl version --client
+Client Version: v1.29.1
+Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
+```
 
 
 ## Arquivo `Makefile`
@@ -33,10 +121,14 @@ Este arquivo informa para o terraform configurações para os providers.
 ### Arquivo `variables.tf`
 Este arquivo configura variáveis para serem utilizadas por outros arquivos.
 
+Nome | Descriçao | Valor padrão configurado
+-----| :-------: | ------
+cluster_name | Nome do Cluster | cajuina
+cluter_k8s_version | Versão do Kubernetes a ser instalado | kindest/node:v1.29.1
+
 ### Arquivo `cluster.tf`
 Este é o "principal" arquivo para a criação do cluster.
 É definido um cluster com o nome definido pela variável `cluster_name` que foi setada no arquivo `variables.tf`
-
 
 ## Utilização:
 
@@ -85,9 +177,10 @@ kubectl get nodes
 ```
 
 ```
+
 NAME                    STATUS   ROLES           AGE   VERSION
-cajuina-control-plane   Ready    control-plane   83s   v1.26.3
-cajuina-worker          Ready    <none>          62s   v1.26.3
+cajuina-control-plane   Ready    control-plane   12m   v1.29.1
+cajuina-worker          Ready    <none>          11m   v1.29.1
 ```
 
 Removendo cluster:
