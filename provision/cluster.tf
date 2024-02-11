@@ -1,5 +1,6 @@
 resource "kind_cluster" "default" {
   name           = var.cluster_name
+  node_image     = var.cluter_k8s_version
   wait_for_ready = true
 
   kind_config {
