@@ -2,6 +2,8 @@
 
 Criar um cluster local Kubernetes `kind` utilizando `Terraform` para fazer o provisionamento.
 
+Será utilizando o Kubernetes na versão 1.29.1
+
 Pré-requisitos:
 
 - [docker](https://www.docker.com/)
@@ -121,8 +123,20 @@ Os arquivos terraform ficam no diretório `provision`.
 ### Arquivo `version.tf`
 Este arquivo possui o bloco `terraform` para indicar quais os providers necessários e quais suas versões.
 
+| Provider | Versão |
+| ------- | :----: |
+| tehcyx/kind | 0.2.1 |
+| hashicorp/kubernetes | 2.25.2 |
+| hashicorp/helm | 2.12.1 |
+
 ### Arquivo `providers.tf`
 Este arquivo informa para o terraform configurações para os providers.
+
+|Provider|
+|:------|
+| kind |
+| kubernetes |
+| helm |
 
 ### Arquivo `variables.tf`
 Este arquivo configura variáveis para serem utilizadas por outros arquivos.
